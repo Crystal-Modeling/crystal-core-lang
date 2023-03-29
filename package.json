@@ -10,29 +10,34 @@
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "crystal-core-language",
-            "aliases": ["Crystal Core Language", "crystal-core-language"],
-            "extensions": [".ccore"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "crystal-core-language",
-            "scopeName": "source.crystal-core-language",
-            "path": "./syntaxes/crystal-core-language.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "crystal-core-language",
+                "aliases": [
+                    "Crystal Core Language",
+                    "crystal-core-language"
+                ],
+                "extensions": [
+                    ".ccore"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "crystal-core-language",
+                "scopeName": "source.crystal-core-language",
+                "path": "./syntaxes/crystal-core-language.tmLanguage.json"
+            }
+        ]
     },
     "activationEvents": [
         "onLanguage:crystal-core-language"
     ],
     "files": [
-        "bin",
         "out",
         "src"
     ],
-    "bin": {
-        "crystal-core-language-cli": "./bin/cli"
-    },
     "main": "./out/extension.js",
     "scripts": {
         "vscode:prepublish": "npm run build && npm run lint",
@@ -44,8 +49,6 @@
     },
     "dependencies": {
         "chevrotain": "~10.4.2",
-        "chalk": "~4.1.2",
-        "commander": "~10.0.0",
         "langium": "~1.1.0",
         "vscode-languageclient": "~8.0.2",
         "vscode-languageserver": "~8.0.2",
