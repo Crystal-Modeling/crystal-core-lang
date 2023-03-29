@@ -1,13 +1,13 @@
 import { ValidationAcceptor, ValidationChecks } from 'langium';
 import { CrystalCoreLanguageAstType, Person } from './generated/ast';
-import type { CrystalCoreLanguageServices } from './crystal-core-language-module';
+import type { BoundaryObjectServices } from './boundary-object-module';
 
 /**
  * Register custom validation checks.
  */
-export function registerValidationChecks(services: CrystalCoreLanguageServices) {
+export function registerValidationChecks(services: BoundaryObjectServices) {
     const registry = services.validation.ValidationRegistry;
-    const validator = services.validation.CrystalCoreLanguageValidator;
+    const validator = services.validation.BoundaryObjectValidator;
     const checks: ValidationChecks<CrystalCoreLanguageAstType> = {
         Person: validator.checkPersonStartsWithCapital
     };
@@ -17,7 +17,7 @@ export function registerValidationChecks(services: CrystalCoreLanguageServices) 
 /**
  * Implementation of custom validations.
  */
-export class CrystalCoreLanguageValidator {
+export class BoundaryObjectValidator {
 
     checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
         if (person.name) {

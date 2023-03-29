@@ -1,19 +1,19 @@
 {
-  "name": "crystal-core-language",
-  "scopeName": "source.crystal-core-language",
+  "name": "boundary-object",
+  "scopeName": "source.boundary-object",
   "fileTypes": [
-    ".ccore"
+    ".ccore-bo"
   ],
   "patterns": [
     {
       "include": "#comments"
     },
     {
-      "name": "keyword.control.crystal-core-language",
-      "match": "\\b(Hello|person)\\b"
+      "name": "keyword.control.boundary-object",
+      "match": "\\b(person)\\b"
     },
     {
-      "name": "string.quoted.double.crystal-core-language",
+      "name": "string.quoted.double.boundary-object",
       "begin": "\"",
       "end": "\"",
       "patterns": [
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "name": "string.quoted.single.crystal-core-language",
+      "name": "string.quoted.single.boundary-object",
       "begin": "'",
       "end": "'",
       "patterns": [
@@ -37,17 +37,17 @@
     "comments": {
       "patterns": [
         {
-          "name": "comment.block.crystal-core-language",
+          "name": "comment.block.boundary-object",
           "begin": "/\\*",
           "beginCaptures": {
             "0": {
-              "name": "punctuation.definition.comment.crystal-core-language"
+              "name": "punctuation.definition.comment.boundary-object"
             }
           },
           "end": "\\*/",
           "endCaptures": {
             "0": {
-              "name": "punctuation.definition.comment.crystal-core-language"
+              "name": "punctuation.definition.comment.boundary-object"
             }
           }
         },
@@ -55,16 +55,16 @@
           "begin": "//",
           "beginCaptures": {
             "1": {
-              "name": "punctuation.whitespace.comment.leading.crystal-core-language"
+              "name": "punctuation.whitespace.comment.leading.boundary-object"
             }
           },
           "end": "(?=$)",
-          "name": "comment.line.crystal-core-language"
+          "name": "comment.line.boundary-object"
         }
       ]
     },
     "string-character-escape": {
-      "name": "constant.character.escape.crystal-core-language",
+      "name": "constant.character.escape.boundary-object",
       "match": "\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|u\\{[0-9A-Fa-f]+\\}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
     }
   }

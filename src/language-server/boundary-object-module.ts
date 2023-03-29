@@ -2,15 +2,15 @@ import {
     createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject,
     LangiumServices, LangiumSharedServices, Module, PartialLangiumServices
 } from 'langium';
-import { CrystalCoreLanguageGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
-import { CrystalCoreLanguageValidator, registerValidationChecks } from './crystal-core-language-validator';
+import { BoundaryObjectGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
+import { BoundaryObjectValidator, registerValidationChecks } from './boundary-object-validator';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
-export type CrystalCoreLanguageAddedServices = {
+export type BoundaryObjectAddedServices = {
     validation: {
-        CrystalCoreLanguageValidator: CrystalCoreLanguageValidator
+        BoundaryObjectValidator: BoundaryObjectValidator
     }
 }
 
@@ -18,16 +18,16 @@ export type CrystalCoreLanguageAddedServices = {
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type CrystalCoreLanguageServices = LangiumServices & CrystalCoreLanguageAddedServices
+export type BoundaryObjectServices = LangiumServices & BoundaryObjectAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const CrystalCoreLanguageModule: Module<CrystalCoreLanguageServices, PartialLangiumServices & CrystalCoreLanguageAddedServices> = {
+export const BoundaryObjectModule: Module<BoundaryObjectServices, PartialLangiumServices & BoundaryObjectAddedServices> = {
     validation: {
-        CrystalCoreLanguageValidator: () => new CrystalCoreLanguageValidator()
+        BoundaryObjectValidator: () => new BoundaryObjectValidator()
     }
 };
 
@@ -46,20 +46,20 @@ export const CrystalCoreLanguageModule: Module<CrystalCoreLanguageServices, Part
  * @param context Optional module context with the LSP connection
  * @returns An object wrapping the shared services and the language-specific services
  */
-export function createCrystalCoreLanguageServices(context: DefaultSharedModuleContext): {
+export function createBoundaryObjectServices(context: DefaultSharedModuleContext): {
     shared: LangiumSharedServices,
-    CrystalCoreLanguage: CrystalCoreLanguageServices
+    BoundaryObject: BoundaryObjectServices
 } {
     const shared = inject(
         createDefaultSharedModule(context),
         CrystalCoreLanguageGeneratedSharedModule
     );
-    const CrystalCoreLanguage = inject(
+    const BoundaryObject = inject(
         createDefaultModule({ shared }),
-        CrystalCoreLanguageGeneratedModule,
-        CrystalCoreLanguageModule
+        BoundaryObjectGeneratedModule,
+        BoundaryObjectModule
     );
-    shared.ServiceRegistry.register(CrystalCoreLanguage);
-    registerValidationChecks(CrystalCoreLanguage);
-    return { shared, CrystalCoreLanguage };
+    shared.ServiceRegistry.register(BoundaryObject);
+    registerValidationChecks(BoundaryObject);
+    return { shared, BoundaryObject };
 }

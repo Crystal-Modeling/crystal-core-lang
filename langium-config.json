@@ -1,12 +1,14 @@
 {
-    "projectName": "CrystalCoreLanguage",
-    "languages": [{
-        "id": "crystal-core-language",
-        "grammar": "src/language-server/crystal-core-language.langium",
-        "fileExtensions": [".ccore"],
-        "textMate": {
-            "out": "syntaxes/crystal-core-language.tmLanguage.json"
-        }
-    }],
-    "out": "src/language-server/generated"
+  "projectName": "CrystalCoreLanguage",
+  "languages": [
+    {
+      "id": "boundary-object",
+      "grammar": "src/language-server/boundary-object.langium",
+      "fileExtensions": [".ccore-bo"],
+      "textMate": {
+        "out": "syntaxes/boundary-object.tmLanguage.json"
+      }
+    }
+  ],
+  "out": "src/language-server/generated"
 }

@@ -12,27 +12,27 @@
   "contributes": {
     "languages": [
       {
-        "id": "crystal-core-language",
+        "id": "boundary-object",
         "aliases": [
-          "Crystal Core Language",
-          "crystal-core-language"
+          "Crystal Core Boundary Object",
+          "boundary-object"
         ],
         "extensions": [
-          ".ccore"
+          ".ccore-bo"
         ],
         "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
       {
-        "language": "crystal-core-language",
-        "scopeName": "source.crystal-core-language",
-        "path": "./syntaxes/crystal-core-language.tmLanguage.json"
+        "language": "boundary-object",
+        "scopeName": "source.boundary-object",
+        "path": "./syntaxes/boundary-object.tmLanguage.json"
       }
     ]
   },
   "activationEvents": [
-    "onLanguage:crystal-core-language"
+    "onLanguage:boundary-object"
   ],
   "files": [
     "out",
