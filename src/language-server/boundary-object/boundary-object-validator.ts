@@ -1,5 +1,5 @@
 import { ValidationChecks } from 'langium';
-import { NameableNodeValidator } from '../crystal-core-abstract-services';
+import { NameableNodeValidator } from '../crystal-core-services/node-validators';
 import { CrystalCoreLanguageAstType } from '../generated/ast';
 import type { BoundaryObjectServices } from './boundary-object-module';
 
