@@ -1,5 +1,6 @@
 grammar BoundaryObject
-import "../crystal-terminals"
+import "../../grammar/classifier-feature"
+import "../../grammar/crystal-terminals"
 
 entry Model:
     (boundaryObjects+=BoundaryObject)*;
@@ -14,10 +15,10 @@ BoundaryOperation:
     '('
     (parameters+=OperationParameter (',' parameters+=OperationParameter)*)?
     ')'
-    (':' returnType=Type)?
+    (':' returnType=[Classifier])?
 ;
 
 OperationParameter:
     name=ID
-    ':' type=Type
+    ':' type=[Classifier]
 ;

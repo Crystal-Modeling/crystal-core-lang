@@ -1,9 +1,6 @@
 grammar Classifier
-import "../crystal-terminals"
+import "../../grammar/classifier-feature"
 
 entry Model:
     (classifiers+=Classifier)*;
 
-Classifier:
-    'type' name=ID
-;
