@@ -1,6 +1,7 @@
 import {
     LangiumServices, Module, PartialLangiumServices
 } from 'langium';
+import { BoundaryObjectSemanticTokenProvider } from './boundary-object-semantic-tokens';
 import { BoundaryObjectValidator } from './boundary-object-validator';
 
 /**
@@ -26,5 +27,8 @@ export type BoundaryObjectServices = LangiumServices & BoundaryObjectAddedServic
 export const BoundaryObjectModule: Module<BoundaryObjectServices, PartialLangiumServices & BoundaryObjectAddedServices> = {
     validation: {
         BoundaryObjectValidator: () => new BoundaryObjectValidator()
+    },
+    lsp: {
+        SemanticTokenProvider: (services) => new BoundaryObjectSemanticTokenProvider(services)
     }
 };

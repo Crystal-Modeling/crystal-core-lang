@@ -1,4 +1,5 @@
 import { LangiumServices, Module, PartialLangiumServices } from "langium";
+import { ClassifierSemanticTokenProvider } from "./classifier-semantic-tokens";
 import { ClassifierValidator } from "./classifier-validator";
 
 /**
@@ -24,5 +25,8 @@ export type ClassifierServices = LangiumServices & ClassifierAddedServices
 export const ClassifierModule: Module<ClassifierServices, PartialLangiumServices & ClassifierAddedServices> = {
     validation: {
         ClassifierValidator: () => new ClassifierValidator()
+    },
+    lsp: {
+        SemanticTokenProvider: (services) => new ClassifierSemanticTokenProvider(services)
     }
 };
