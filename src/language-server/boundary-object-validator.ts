@@ -1,6 +1,6 @@
-import { ValidationAcceptor, ValidationChecks } from 'langium';
-import { CrystalCoreLanguageAstType, Person } from './generated/ast';
+import { AstNode, ValidationAcceptor, ValidationChecks } from 'langium';
 import type { BoundaryObjectServices } from './boundary-object-module';
+import { CrystalCoreLanguageAstType } from './generated/ast';
 
 /**
  * Register custom validation checks.
@@ -9,7 +9,9 @@ export function registerValidationChecks(services: BoundaryObjectServices) {
     const registry = services.validation.ValidationRegistry;
     const validator = services.validation.BoundaryObjectValidator;
     const checks: ValidationChecks<CrystalCoreLanguageAstType> = {
-        Person: validator.checkPersonStartsWithCapital
+        BoundaryObject: validator.checkNameStartsWithCapital,
+        BoundaryOperation: validator.checkNameStartsWithLowercase,
+        OperationParameter: validator.checkNameStartsWithLowercase
     };
     registry.register(checks, validator);
 }
@@ -19,11 +21,20 @@ export function registerValidationChecks(services: BoundaryObjectServices) {
  */
 export class BoundaryObjectValidator {
 
-    checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
-        if (person.name) {
-            const firstChar = person.name.substring(0, 1);
+    checkNameStartsWithCapital(type: AstNode & { name: string }, accept: ValidationAcceptor): void {
+        if (type.name) {
+            const firstChar = type.name.substring(0, 1);
             if (firstChar.toUpperCase() !== firstChar) {
-                accept('warning', 'Person name should start with a capital.', { node: person, property: 'name' });
+                accept('warning', `${type.$type} name should start with a capital.`, { node: type, property: 'name' });
+            }
+        }
+    }
+
+    checkNameStartsWithLowercase(type: AstNode & { name: string }, accept: ValidationAcceptor): void {
+        if (type.name) {
+            const firstChar = type.name.substring(0, 1);
+            if (firstChar.toLowerCase() !== firstChar) {
+                accept('warning', `${type.$type} name should start with a lowercase character.`, { node: type, property: 'name' });
             }
         }
     }

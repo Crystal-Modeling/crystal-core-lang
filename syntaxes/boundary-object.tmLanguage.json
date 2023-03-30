@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.boundary-object",
-      "match": "\\b(person)\\b"
+      "match": "\\b(boundary|op)\\b"
     },
     {
       "name": "string.quoted.double.boundary-object",
