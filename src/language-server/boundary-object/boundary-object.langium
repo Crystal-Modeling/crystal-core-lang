@@ -1,5 +1,5 @@
 grammar BoundaryObject
-import "./crystal-terminals"
+import "../crystal-terminals"
 
 entry Model:
     (boundaryObjects+=BoundaryObject)*;

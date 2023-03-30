@@ -1,13 +1,13 @@
 import { startLanguageServer } from 'langium';
 import { NodeFileSystem } from 'langium/node';
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node';
-import { createBoundaryObjectServices } from './boundary-object-module';
+import { createCrystalCoreLanguageServices } from './crystal-core-lang-module';
 
 // Create a connection to the client
 const connection = createConnection(ProposedFeatures.all);
 
 // Inject the shared services and language-specific services
-const { shared } = createBoundaryObjectServices({ connection, ...NodeFileSystem });
+const { shared } = createCrystalCoreLanguageServices({ connection, ...NodeFileSystem });
 
 // Start the language server with the shared services
 startLanguageServer(shared);

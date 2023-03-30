@@ -33,12 +33,15 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
         debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
     };
 
-    const fileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.ccore-bo');
+    const fileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.ccore-(bo|class)');
     context.subscriptions.push(fileSystemWatcher);
 
     // Options to control the language client
     const clientOptions: LanguageClientOptions = {
-        documentSelector: [{ scheme: 'file', language: 'boundary-object' }],
+        documentSelector: [
+            { scheme: 'file', language: 'boundary-object' },
+            { scheme: 'file', language: 'classifier' }
+        ],
         synchronize: {
             // Notify the server about file changes to files contained in the workspace
             fileEvents: fileSystemWatcher
@@ -47,8 +50,8 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
 
     // Create the language client and start the client.
     const client = new LanguageClient(
-        'boundary-object',
-        'Crystal Core Boundary Object',
+        'crystal-core-lang',
+        'Crystal Core Language',
         serverOptions,
         clientOptions
     );

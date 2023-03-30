@@ -2,8 +2,16 @@
   "projectName": "CrystalCoreLanguage",
   "languages": [
     {
+      "id": "classifier",
+      "grammar": "src/language-server/classifier/classifier.langium",
+      "fileExtensions": [".ccore-class"],
+      "textMate": {
+        "out": "syntaxes/classifier.tmLanguage.json"
+      }
+    },
+    {
       "id": "boundary-object",
-      "grammar": "src/language-server/boundary-object.langium",
+      "grammar": "src/language-server/boundary-object/boundary-object.langium",
       "fileExtensions": [".ccore-bo"],
       "textMate": {
         "out": "syntaxes/boundary-object.tmLanguage.json"

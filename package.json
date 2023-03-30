@@ -21,6 +21,17 @@
           ".ccore-bo"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "classifier",
+        "aliases": [
+          "Crystal Core Classifier",
+          "classifier"
+        ],
+        "extensions": [
+          ".ccore-class"
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -28,12 +39,15 @@
         "language": "boundary-object",
         "scopeName": "source.boundary-object",
         "path": "./syntaxes/boundary-object.tmLanguage.json"
+      },
+      {
+        "language": "classifier",
+        "scopeName": "source.classifier",
+        "path": "./syntaxes/classifier.tmLanguage.json"
       }
     ]
   },
-  "activationEvents": [
-    "onLanguage:boundary-object"
-  ],
+  "activationEvents": [],
   "files": [
     "out",
     "src"
