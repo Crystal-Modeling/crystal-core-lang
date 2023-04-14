@@ -1,5 +1,5 @@
 import { ValidationChecks } from "langium";
-import { NameableNodeValidator } from "../crystal-core-services/node-validation";
+import { NameableNodeValidator } from "../crystal-core/node-validation";
 import { CrystalCoreLanguageAstType } from "../generated/ast";
 import { ClassifierServices } from "./classifier-module";
 
