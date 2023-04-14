@@ -1,6 +1,9 @@
 grammar Classifier
 import "../../grammar/classifier-feature"
+import "../../grammar/crystal-common"
 
-entry Model:
-    (classifiers+=Classifier)*;
+entry Module:
+    Packageable
+    (classifiers+=Classifier)*
+;
 

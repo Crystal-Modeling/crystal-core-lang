@@ -1,4 +1,9 @@
 
+fragment Packageable:
+    'package' package=QualifiedName
+;
+QualifiedName returns string:
+    ID ('.' ID)*;
 
 hidden terminal WS: /\s+/;
 terminal ID: /[_a-zA-Z][\w_]*/;

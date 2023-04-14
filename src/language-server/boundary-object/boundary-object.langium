@@ -1,14 +1,16 @@
 grammar BoundaryObject
 import "../../grammar/classifier-feature"
-import "../../grammar/crystal-terminals"
+import "../../grammar/crystal-common"
 
-entry Model:
+entry Library:
+    Packageable
     (boundaryObjects+=BoundaryObject)*;
 
 BoundaryObject:
     'boundary' name=ID '{'
     (operations+=BoundaryOperation)*
-    '}';
+    '}'
+;
 
 BoundaryOperation:
     'op' name=ID

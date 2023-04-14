@@ -1,4 +1,4 @@
-import "./crystal-terminals"
+import "./crystal-common"
 
 
 Classifier:

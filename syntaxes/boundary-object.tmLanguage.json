@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.boundary-object",
-      "match": "\\b(boundary|op)\\b"
+      "match": "\\b(boundary|op|package)\\b"
     },
     {
       "name": "string.quoted.double.boundary-object",
