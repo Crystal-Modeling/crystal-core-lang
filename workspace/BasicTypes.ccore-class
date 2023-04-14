@@ -1,0 +1,4 @@
+package crystal.lang
+
+type String
+type Integer

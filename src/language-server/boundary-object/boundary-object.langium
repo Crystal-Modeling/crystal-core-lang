@@ -17,10 +17,10 @@ BoundaryOperation:
     '('
     (parameters+=OperationParameter (',' parameters+=OperationParameter)*)?
     ')'
-    (':' returnType=[Classifier:ID])?
+    (':' returnType=[Classifier:QualifiedName])?
 ;
 
 OperationParameter:
     name=ID
-    ':' type=[Classifier:ID]
+    ':' type=[Classifier:QualifiedName]
 ;

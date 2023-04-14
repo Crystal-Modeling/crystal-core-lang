@@ -1,0 +1,6 @@
+package crystal.lang
+
+boundary Console {
+    op printLine(line: crystal.lang.String)
+    op prompt(message: crystal.lang.String): crystal.lang.String
+}
