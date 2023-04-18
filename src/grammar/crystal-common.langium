@@ -1,9 +1,11 @@
 
-fragment Packageable:
-    'package' package=QualifiedName
+Package:
+    'package' name=QualifiedName
 ;
+
 QualifiedName returns string:
-    ID ('.' ID)*;
+    ID ('.' ID)*
+;
 
 hidden terminal WS: /\s+/;
 terminal ID: /[_a-zA-Z][\w_]*/;

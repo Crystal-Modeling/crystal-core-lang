@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.classifier",
-      "match": "\\b(package|type)\\b"
+      "match": "\\b(import|package|test|type)\\b"
     },
     {
       "name": "string.quoted.double.classifier",

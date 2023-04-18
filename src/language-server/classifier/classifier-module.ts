@@ -2,7 +2,7 @@ import { LangiumServices, Module, PartialLangiumServices } from "langium";
 import { ClassifierSemanticTokenProvider } from "./classifier-semantic-tokens";
 import { ClassifierValidator } from "./classifier-validator";
 import { QualifiedNameProvider } from "../crystal-core/naming";
-import { ClassifierScopeComputation } from "./classifier-scope";
+import { ClassifierScopeComputation, ClassifierScopeProvider } from "./classifier-scope";
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -30,7 +30,8 @@ export type ClassifierServices = LangiumServices & ClassifierAddedServices
 export const ClassifierModule: Module<ClassifierServices, PartialLangiumServices & ClassifierAddedServices> = {
     references: {
         QualifiedNameProvider: () => new QualifiedNameProvider(),
-        ScopeComputation: (services) => new ClassifierScopeComputation(services)
+        ScopeComputation: (services) => new ClassifierScopeComputation(services),
+        ScopeProvider: (services) => new ClassifierScopeProvider(services)
     },
     validation: {
         ClassifierValidator: () => new ClassifierValidator()

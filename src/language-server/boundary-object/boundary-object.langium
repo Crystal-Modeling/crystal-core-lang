@@ -3,7 +3,7 @@ import "../../grammar/classifier-feature"
 import "../../grammar/crystal-common"
 
 entry Library:
-    Packageable
+    package=Package
     (boundaryObjects+=BoundaryObject)*;
 
 BoundaryObject:

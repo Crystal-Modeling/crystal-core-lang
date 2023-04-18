@@ -3,7 +3,8 @@ import "../../grammar/classifier-feature"
 import "../../grammar/crystal-common"
 
 entry Module:
-    Packageable
-    (classifiers+=Classifier)*
+    package=Package
+    ('import' imports+=[Classifier:QualifiedName])*
+    (classifiers+=(Classifier|TestClassifier))*
 ;
 

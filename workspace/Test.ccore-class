@@ -1,0 +1,6 @@
+package lang.crystal.testing
+import crystal.lang.Integer
+
+test TestType: crystal.lang.String
+
+test AnT: Integer

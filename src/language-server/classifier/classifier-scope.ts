@@ -1,8 +1,8 @@
-import { AstNodeDescription, DefaultScopeComputation, LangiumDocument, interruptAndCheck, streamAllContents } from "langium";
-import { QualifiedNameProvider } from "../crystal-core/naming";
-import { ClassifierServices } from "./classifier-module";
+import { AstNodeDescription, DefaultScopeComputation, DefaultScopeProvider, LangiumDocument, ReferenceInfo, Scope, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
-import { isClassifier } from "../generated/ast";
+import { QualifiedNameProvider } from "../crystal-core/naming";
+import { Module, isClassifier, isModule } from "../generated/ast";
+import { ClassifierServices } from "./classifier-module";
 
 export class ClassifierScopeComputation extends DefaultScopeComputation {
 
@@ -23,33 +23,54 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
             if (isClassifier(node)) {
                 let name = this.nameProvider.getName(node);
                 if (name) {
-                    name = this.qualifiedNameProvider.getQualifiedName(node.$container, name);
+                    name = this.qualifiedNameProvider.getQualifiedName(node.$container.package, name);
                     descr.push(this.descriptions.createDescription(node, name, document));
                 }
             }
         }
         return descr;
     }
+}
 
-    // override async computeLocalScopes(document: LangiumDocument, cancelToken = CancellationToken.None): Promise<PrecomputedScopes> {
-    //     const model = document.parseResult.value as Module;
-    //     const scopes = new MultiMap<AstNode, AstNodeDescription>();
-    //     await this.processContainer(model, scopes, document, cancelToken);
-    //     return scopes;
-    // }
+export class ClassifierScopeProvider extends DefaultScopeProvider {
 
-    // protected async processContainer(container: Module, scopes: PrecomputedScopes, document: LangiumDocument, cancelToken: CancellationToken): Promise<AstNodeDescription[]> {
-    //     const localDescriptions: AstNodeDescription[] = [];
-    //     for (const element of container.classifiers) {
-    //         await interruptAndCheck(cancelToken);
-    //         if (isClassifier(element)) {
-    //             const qualifiedName = this.qualifiedNameProvider.getQualifiedName(container, element.name);
-    //             const description = this.descriptions.createDescription(element, qualifiedName, document);
-    //             localDescriptions.push(description);
-    //         }
-    //     }
-    //     scopes.addAll(container, localDescriptions);
-    //     return localDescriptions;
-    // }
+    qualifiedNameProvider: QualifiedNameProvider;
 
+    constructor(services: ClassifierServices) {
+        super(services);
+        this.qualifiedNameProvider = services.references.QualifiedNameProvider;
+    }
+
+
+    protected override getGlobalScope(referenceType: string, _context: ReferenceInfo): Scope {
+        const importsModuleProp: keyof Module = 'imports';
+
+        if (isModule(_context.container) && _context.property === importsModuleProp) {
+            return super.getGlobalScope(referenceType, _context);
+        }
+
+        let rootContainer = _context.container;
+        while (rootContainer.$container) {
+            rootContainer = rootContainer.$container;
+        }
+
+        if (isModule(rootContainer)) {
+            const importedNodes: AstNodeDescription[] = [];
+
+            rootContainer.imports.forEach((importStatament) => {
+                let nodeDescription = importStatament.$nodeDescription;
+
+                if (nodeDescription) {
+                    importedNodes.push({
+                        ...nodeDescription,
+                        name: this.qualifiedNameProvider.getSimpleName(nodeDescription.name)
+                    });
+                }
+            });
+
+            return this.createScope(importedNodes, super.getGlobalScope(referenceType, _context));
+        }
+
+        return super.getGlobalScope(referenceType, _context);
+    }
 }
