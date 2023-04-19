@@ -1,5 +1,5 @@
 import { AbstractCrystalCoreSemanticTokenProvider } from "../crystal-core/semantic-token-provider";
 
-export class BoundaryObjectSemanticTokenProvider extends AbstractCrystalCoreSemanticTokenProvider {
+export class BehaviorSemanticTokenProvider extends AbstractCrystalCoreSemanticTokenProvider {
 
 }

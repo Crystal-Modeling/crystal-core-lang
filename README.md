@@ -9,13 +9,14 @@ To implement minimal requirements for designing CrystalCore grammar and Langium 
 CrystalCore v1 should have:
 
 1. Tiny *Classifier* lang with typedefs of basic lang types (such as String and Integer), and library *BoundaryObject*s, such as Console. ∀ BoundaryObject should have just text name (so far). Icons should be added on visualizing phase (e.g., as SVG icon URLs, if CrystalCore lib = github repo, following GoLang idea).
-2. Main *Operation* lang for defining Operation's behavior:
-     * Operation (and its Behavior) declaration (implementation)
+2. Main *Behavior* lang for defining Operation's behavior:
+     * Behavior declaration (Operation's implementation)
      * Variable declaration
      * Variable assignment
      * Constant initialization
      * Value specification (i.e., value *literal*)
      * Import definition
+     * BoundaryOperation invokation
 
 Semantic elements to be included:
 

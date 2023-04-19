@@ -12,13 +12,13 @@
   "contributes": {
     "languages": [
       {
-        "id": "boundary-object",
+        "id": "behavior",
         "aliases": [
-          "Crystal Core Boundary Object",
-          "boundary-object"
+          "Crystal Core Behavior",
+          "behavior"
         ],
         "extensions": [
-          ".ccore-bo"
+          ".ccore-behavior"
         ],
         "configuration": "./language-configuration.json"
       },
@@ -36,9 +36,9 @@
     ],
     "grammars": [
       {
-        "language": "boundary-object",
-        "scopeName": "source.boundary-object",
-        "path": "./syntaxes/boundary-object.tmLanguage.json"
+        "language": "behavior",
+        "scopeName": "source.behavior",
+        "path": "./syntaxes/behavior.tmLanguage.json"
       },
       {
         "language": "classifier",

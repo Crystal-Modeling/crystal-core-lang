@@ -39,7 +39,7 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
     // Options to control the language client
     const clientOptions: LanguageClientOptions = {
         documentSelector: [
-            { scheme: 'file', language: 'boundary-object' },
+            { scheme: 'file', language: 'behavior' },
             { scheme: 'file', language: 'classifier' }
         ],
         synchronize: {

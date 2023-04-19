@@ -1,15 +1,15 @@
 import {
     LangiumServices, Module, PartialLangiumServices
 } from 'langium';
-import { BoundaryObjectSemanticTokenProvider } from './boundary-object-semantic-tokens';
-import { BoundaryObjectValidator } from './boundary-object-validator';
+import { BehaviorSemanticTokenProvider } from './behavior-semantic-tokens';
+import { BehaviorValidator } from './behavior-validator';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
-export type BoundaryObjectAddedServices = {
+export type BehaviorAddedServices = {
     validation: {
-        BoundaryObjectValidator: BoundaryObjectValidator
+        BehaviorValidator: BehaviorValidator
     }
 }
 
@@ -17,18 +17,18 @@ export type BoundaryObjectAddedServices = {
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type BoundaryObjectServices = LangiumServices & BoundaryObjectAddedServices
+export type BehaviorServices = LangiumServices & BehaviorAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const BoundaryObjectModule: Module<BoundaryObjectServices, PartialLangiumServices & BoundaryObjectAddedServices> = {
+export const BehaviorModule: Module<BehaviorServices, PartialLangiumServices & BehaviorAddedServices> = {
     validation: {
-        BoundaryObjectValidator: () => new BoundaryObjectValidator()
+        BehaviorValidator: () => new BehaviorValidator()
     },
     lsp: {
-        SemanticTokenProvider: (services) => new BoundaryObjectSemanticTokenProvider(services)
+        SemanticTokenProvider: (services) => new BehaviorSemanticTokenProvider(services)
     }
 };

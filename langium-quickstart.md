@@ -7,10 +7,10 @@ This folder contains all necessary files for your language extension.
 * `package.json` - the manifest file in which you declare your language support.
 * `language-configuration.json` - the language configuration used in the VS Code editor, defining the tokens that are used for comments and brackets.
 * `src/extension.ts` - the main code of the extension, which is responsible for launching a language server and client.
-* `src/language-server/boundary-object.langium` -  the grammar definition of your language.
+* `src/language-server/behavior.langium` -  the grammar definition of your language.
 * `src/language-server/main.ts` - the entry point of the language server process.
-* `src/language-server/boundary-object-module.ts` - the dependency injection module of your language implementation. Use this to register overridden and added services.
-* `src/language-server/boundary-object-validator.ts` - an example validator. You should change it to reflect the semantics of your language.
+* `src/language-server/behavior-module.ts` - the dependency injection module of your language implementation. Use this to register overridden and added services.
+* `src/language-server/behavior-validator.ts` - an example validator. You should change it to reflect the semantics of your language.
 
 ## Get up and running straight away
 

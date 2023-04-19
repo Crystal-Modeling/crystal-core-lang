@@ -1,7 +1,9 @@
 {
   "name": "behavior",
   "scopeName": "source.behavior",
-  "fileTypes": [".ccore-behavior"],
+  "fileTypes": [
+    ".ccore-behavior"
+  ],
   "patterns": [
     {
       "include": "#comments"

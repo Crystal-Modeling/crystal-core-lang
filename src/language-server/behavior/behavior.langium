@@ -1,4 +1,4 @@
-grammar BoundaryObject
+grammar Behavior
 import "../../grammar/boundary-object-feature"
 import "../../grammar/crystal-common"
 

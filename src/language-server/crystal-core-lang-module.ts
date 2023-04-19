@@ -1,11 +1,11 @@
 import {
     createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject, LangiumSharedServices
 } from 'langium';
-import { BoundaryObjectModule, BoundaryObjectServices } from './boundary-object/boundary-object-module';
-import { registerBoundaryObjectValidationChecks } from './boundary-object/boundary-object-validator';
+import { BehaviorModule, BehaviorServices } from './behavior/behavior-module';
+import { registerBehaviorValidationChecks } from './behavior/behavior-validator';
 import { ClassifierModule } from './classifier/classifier-module';
 import { registerClassifierValidationChecks } from './classifier/classifier-validator';
-import { BoundaryObjectGeneratedModule, ClassifierGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
+import { BehaviorGeneratedModule, ClassifierGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
 
 
 /**
@@ -25,25 +25,25 @@ import { BoundaryObjectGeneratedModule, ClassifierGeneratedModule, CrystalCoreLa
  */
 export function createCrystalCoreLanguageServices(context: DefaultSharedModuleContext): {
     shared: LangiumSharedServices,
-    boundaryObject: BoundaryObjectServices
+    behavior: BehaviorServices
 } {
     const shared = inject(
         createDefaultSharedModule(context),
         CrystalCoreLanguageGeneratedSharedModule
     );
-    const boundaryObject = inject(
+    const behavior = inject(
         createDefaultModule({ shared }),
-        BoundaryObjectGeneratedModule,
-        BoundaryObjectModule
+        BehaviorGeneratedModule,
+        BehaviorModule
     );
     const classifier = inject(
         createDefaultModule({ shared }),
         ClassifierGeneratedModule,
         ClassifierModule
     );
-    shared.ServiceRegistry.register(boundaryObject);
+    shared.ServiceRegistry.register(behavior);
     shared.ServiceRegistry.register(classifier);
-    registerBoundaryObjectValidationChecks(boundaryObject);
+    registerBehaviorValidationChecks(behavior);
     registerClassifierValidationChecks(classifier);
-    return { shared, boundaryObject };
+    return { shared, behavior };
 }

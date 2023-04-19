@@ -10,11 +10,11 @@
       }
     },
     {
-      "id": "boundary-object",
-      "grammar": "src/language-server/boundary-object/boundary-object.langium",
-      "fileExtensions": [".ccore-bo"],
+      "id": "behavior",
+      "grammar": "src/language-server/behavior/behavior.langium",
+      "fileExtensions": [".ccore-behavior"],
       "textMate": {
-        "out": "syntaxes/boundary-object.tmLanguage.json"
+        "out": "syntaxes/behavior.tmLanguage.json"
       }
     }
   ],

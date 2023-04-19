@@ -1,14 +1,14 @@
 import { ValidationChecks } from 'langium';
 import { NameableNodeValidator } from '../crystal-core/node-validation';
 import { CrystalCoreLanguageAstType } from '../generated/ast';
-import type { BoundaryObjectServices } from './boundary-object-module';
+import type { BehaviorServices } from './behavior-module';
 
 /**
  * Register custom validation checks.
  */
-export function registerBoundaryObjectValidationChecks(services: BoundaryObjectServices) {
+export function registerBehaviorValidationChecks(services: BehaviorServices) {
     const registry = services.validation.ValidationRegistry;
-    const validator = services.validation.BoundaryObjectValidator;
+    const validator = services.validation.BehaviorValidator;
     const checks: ValidationChecks<CrystalCoreLanguageAstType> = {
         BoundaryObject: validator.checkNameStartsWithCapital,
         BoundaryOperation: validator.checkNameStartsWithLowercase,
@@ -20,6 +20,6 @@ export function registerBoundaryObjectValidationChecks(services: BoundaryObjectS
 /**
  * Implementation of custom validations.
  */
-export class BoundaryObjectValidator extends NameableNodeValidator {
+export class BehaviorValidator extends NameableNodeValidator {
 
 }
