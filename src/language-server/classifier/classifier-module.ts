@@ -1,9 +1,9 @@
 import { LangiumServices, Module, PartialLangiumServices } from "langium";
+import { QualifiedNameProvider } from "../crystal-core/naming";
+import { ClassifierRenameProvider } from "./classifier-refactoring-rename";
+import { ClassifierScopeComputation, ClassifierScopeProvider } from "./classifier-scope";
 import { ClassifierSemanticTokenProvider } from "./classifier-semantic-tokens";
 import { ClassifierValidator } from "./classifier-validator";
-import { QualifiedNameProvider } from "../crystal-core/naming";
-import { ClassifierScopeComputation, ClassifierScopeProvider } from "./classifier-scope";
-import { ClassifierRenameProvider } from "./classifier-refactoring-rename";
 
 /**
  * Declaration of custom services - add your own service classes here.

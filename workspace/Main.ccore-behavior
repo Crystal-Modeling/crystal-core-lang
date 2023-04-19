@@ -1,2 +1,15 @@
-package crystal.lang
+package org.user.program
+import crystal.lang.String
+import crystal.io.Console
+import crystal.io.Console.printLine
 
+behavior Main {
+    var name: String = "Hello world!"
+    val greeting = "Greetings!"
+    name = "Hello world"
+    greeting = "Another greeting, should give meaningful error message"
+
+    crystal.io.Console.printLine(name)
+    Console.printLine("This should also work!")
+    printLine("I am not sure I want to enable BoundaryOperation import")
+}

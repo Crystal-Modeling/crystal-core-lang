@@ -92,7 +92,7 @@ export class ClassifierRenameProvider extends DefaultRenameProvider {
 
     protected buildQualifiedName(node: AstNode, nodeName: string): string {
         if (isModule(node.$container)) {
-            return this.qualifiedNameProvider.getQualifiedName(node.$container.package, nodeName);
+            return this.qualifiedNameProvider.getQualifiedName(node.$container, nodeName);
         }
         return nodeName;
     }

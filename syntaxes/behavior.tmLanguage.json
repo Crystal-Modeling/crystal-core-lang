@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.behavior",
-      "match": "\\b(boundary|op|package)\\b"
+      "match": "\\b(behavior|import|package|val|var)\\b"
     },
     {
       "name": "string.quoted.double.behavior",

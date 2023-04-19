@@ -1,16 +1,21 @@
-import { Package } from "../generated/ast";
+import { BoundaryObject, Module, isModule } from "../generated/ast";
 
 export class QualifiedNameProvider {
 
     private readonly DOT = '.';
 
     /**
-     * @param pack a package containing the element
+     * @param pack a `Package` or `BoundaryObject` containing the element
      * @param name a simple name of the element
      * @returns qualified name separated by `.`
      */
-    getQualifiedName(pack: Package, name: string): string {
-        const prefix = pack.name;
+    getQualifiedName(qualifier: Module | BoundaryObject, name: string): string {
+        let prefix: string;
+        if (isModule(qualifier)) {
+            prefix = qualifier.package.name;
+        } else {
+            prefix = this.getQualifiedName(qualifier.$container, qualifier.name);
+        }
         return (prefix ? prefix + this.DOT : '') + name;
     }
 
