@@ -10,7 +10,10 @@ export function registerClassifierValidationChecks(services: ClassifierServices)
     const registry = services.validation.ValidationRegistry;
     const validator = services.validation.ClassifierValidator;
     const checks: ValidationChecks<CrystalCoreLanguageAstType> = {
-        Classifier: validator.checkNameStartsWithCapital
+        Classifier: validator.checkNameStartsWithCapital,
+        BoundaryObject: validator.checkNameStartsWithCapital,
+        BoundaryOperation: validator.checkNameStartsWithLowercase,
+        OperationParameter: validator.checkNameStartsWithLowercase
     };
     registry.register(checks, validator);
 }

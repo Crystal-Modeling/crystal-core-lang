@@ -1,7 +1,7 @@
 import { AstNodeDescription, DefaultScopeComputation, DefaultScopeProvider, LangiumDocument, ReferenceInfo, Scope, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
 import { QualifiedNameProvider } from "../crystal-core/naming";
-import { Module, isClassifier, isModule } from "../generated/ast";
+import { Module, isModule } from "../generated/ast";
 import { ClassifierServices } from "./classifier-module";
 
 export class ClassifierScopeComputation extends DefaultScopeComputation {
@@ -20,7 +20,7 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
         const descr: AstNodeDescription[] = [];
         for (const node of streamAllContents(document.parseResult.value)) {
             await interruptAndCheck(cancelToken);
-            if (isClassifier(node)) {
+            if (isModule(node.$container)) {
                 let name = this.nameProvider.getName(node);
                 if (name) {
                     name = this.qualifiedNameProvider.getQualifiedName(node.$container.package, name);
