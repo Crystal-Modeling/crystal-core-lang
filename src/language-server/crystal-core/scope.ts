@@ -1,6 +1,6 @@
-import { AstNode, AstNodeDescription, DefaultScopeProvider, ReferenceInfo, Scope, findRootNode } from "langium";
+import { AstNode, AstNodeDescription, DefaultScopeProvider, ReferenceInfo, Scope, findRootNode, getDocument } from "langium";
 import { QualifiedNameProvider } from "../crystal-core/naming";
-import { BoundaryObject, BoundaryOperation } from "../generated/ast";
+import { BoundaryOperation, isBoundaryObject } from "../generated/ast";
 import { ImportsContainer, isImportsContainer } from "./fragments";
 import { CrystalCoreServices } from "./services";
 
@@ -24,16 +24,17 @@ export abstract class CrystalCoreScopeProvider extends DefaultScopeProvider {
         const rootNode = findRootNode(_context.container);
 
         if (this.isImportsContainer(rootNode)) {
-            const importsScope = this.calculateImportsScope(rootNode, referenceType);
+            const importsScopeElements = this.calculateImportedElementsForReferenceType(rootNode, referenceType);
 
-            return this.createScope(importsScope, globalScope);
+            return this.createScope(importsScopeElements, globalScope);
         }
 
         return globalScope;
     }
 
 
-    private calculateImportsScope(rootNode: ImportsContainer, referenceType: string): AstNodeDescription[] {
+    private calculateImportedElementsForReferenceType(rootNode: ImportsContainer, refType: string)
+        : AstNodeDescription[] {
         const importedNodes: AstNodeDescription[] = [];
 
         rootNode.imports.forEach((importStatament) => {
@@ -41,25 +42,25 @@ export abstract class CrystalCoreScopeProvider extends DefaultScopeProvider {
             if (importStatament.$nodeDescription) {
                 const importedNodeDescription = importStatament.$nodeDescription;
 
-                if (referenceType === importedNodeDescription.type) {
+                if (refType === importedNodeDescription.type) {
                     importedNodes.push({
                         ...importedNodeDescription,
                         name: this.qualifiedNameProvider.getSimpleName(importedNodeDescription.name)
                     });
-                } else if (referenceType === BoundaryOperation && importedNodeDescription.type === BoundaryObject) {
-                    // Imports are already resolved, using computeExports -> hence the name is fully qualified name
-                    const importedBOQualifiedName = importedNodeDescription.name
+                } else if (refType === BoundaryOperation) {
+                    //HACK: Relying on the fact that all imports are already resolved => type is not undefined
+                    //HACK: Relying also on the fact that BoundaryOperations are only contained in the BoundaryObject
+                    if (isBoundaryObject(importStatament.ref)) {
+                        const boundaryObject = importStatament.ref
+                        const boundaryObjectDocument = getDocument(boundaryObject)
+                        const boundaryObjectName = this.nameProvider.getName(boundaryObject)
 
-                    this.indexManager.allElements(BoundaryOperation)
-                        .filter((boundaryOperation) => boundaryOperation.name.startsWith(importedBOQualifiedName))
-                        .forEach((boundaryOperationNodeDescription) => {
-                            importedNodes.push({
-                                ...boundaryOperationNodeDescription,
-                                name: this.qualifiedNameProvider
-                                    .getRelativeName(importedBOQualifiedName, boundaryOperationNodeDescription.name)
-                            });
+                        boundaryObject.operations.forEach((operation) => {
+                            const operationNameInObject = this.qualifiedNameProvider
+                                .combineNames(boundaryObjectName, this.nameProvider.getName(operation))
+                            importedNodes.push(this.descriptions.createDescription(operation, operationNameInObject, boundaryObjectDocument));
                         });
-
+                    }
                 }
             }
         });

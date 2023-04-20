@@ -16,7 +16,7 @@ export class QualifiedNameProvider {
         } else {
             prefix = this.getQualifiedName(qualifier.$container, qualifier.name);
         }
-        return (prefix ? prefix + this.DOT : '') + simpleName;
+        return this.combineNames(prefix, simpleName);
     }
 
     /**
@@ -29,16 +29,12 @@ export class QualifiedNameProvider {
     }
 
     /**
-     * @param relativeQualifierName fully qualified name of the container, against which to perform relative qualification.
-     * Must be a substring of `qualifiedName`
-     * @param qualifiedName qualified name of the element, nested in the relativeQualifier
-     * @returns relatively qualified name. For instance, if `qualifiedName` is 'package.Object.operation'
-     * and `relativeQualifierName` is 'package.Object', then 'Object.operation' will be returned
+     * @param prefixName 
+     * @param name 
+     * @returns `name` qualified by `prefixName`
      */
-    getRelativeName(relativeQualifierName: string, qualifiedName: string): string {
-        const nameWithinRelativeQualifier = qualifiedName.substring(relativeQualifierName.length + this.DOT.length);
-        const relativeQualifierSimpleName = this.getSimpleName(relativeQualifierName);
-        return relativeQualifierSimpleName + this.DOT + nameWithinRelativeQualifier;
+    combineNames(prefixName: string | undefined, name: string | undefined): string {
+        return (prefixName ? prefixName + this.DOT : '') + name ?? '';
     }
 
     /**

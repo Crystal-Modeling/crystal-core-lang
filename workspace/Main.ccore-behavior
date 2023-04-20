@@ -8,6 +8,6 @@ behavior Main {
     name = "Hello world"
     // greeting = "Another greeting, should give meaningful error message"
 
-    // crystal.io.Console.printLine(name)
+    crystal.io.Console.printLine(name)
     Console.printLine("This should also work!")
 }
