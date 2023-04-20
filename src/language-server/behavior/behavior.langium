@@ -11,7 +11,7 @@ entry Workspace:
 
 //BUG: Raise a ticket on Langium: ImportableElement *is* referenced in CrossReference
 ImportableElement:
-    Classifier | BoundaryObject | BoundaryOperation
+    Classifier | BoundaryObject
 ;
 
 Behavior:
@@ -28,7 +28,7 @@ AbstractStatement:
     |
     ConstantInitialization
     |
-    BoundaryObjectInvokation
+    BoundaryOperationInvokation
 ;
 
 ValueContainer:
@@ -65,7 +65,7 @@ ConstantInitialization infers Constant:
     Assignment
 ;
 
-BoundaryObjectInvokation:
+BoundaryOperationInvokation:
     operation=[BoundaryOperation:QualifiedName]
     '('
     (arguments+=Argument (',' arguments+=Argument)*)?

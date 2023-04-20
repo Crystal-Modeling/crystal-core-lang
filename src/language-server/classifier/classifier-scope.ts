@@ -1,8 +1,9 @@
-import { AstNodeDescription, DefaultScopeComputation, LangiumDocument, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
+import { AstNode, AstNodeDescription, DefaultScopeComputation, LangiumDocument, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
+import { ImportsContainer } from "../crystal-core/fragments";
 import { QualifiedNameProvider } from "../crystal-core/naming";
 import { CrystalCoreScopeProvider } from "../crystal-core/scope";
-import { Module, isBoundaryObject, isModule } from "../generated/ast";
+import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../generated/ast";
 import { ClassifierServices } from "./classifier-module";
 
 export class ClassifierScopeProvider extends CrystalCoreScopeProvider {
@@ -11,6 +12,10 @@ export class ClassifierScopeProvider extends CrystalCoreScopeProvider {
         const importsModuleProp: keyof Module = 'imports';
 
         return isModule(_context.container) && _context.property === importsModuleProp;
+    }
+
+    protected override isValidRootNode(rootNode: ImportsContainer): boolean {
+        return isModule(rootNode);
     }
 
 }
@@ -24,21 +29,29 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
         this.qualifiedNameProvider = services.references.QualifiedNameProvider;
     }
 
+
     /**
-     * Exports root elements and `BehaviorOperation`s with their qualified names.
+     * Iterate through **all** elements with their qualified names.
      */
     override async computeExports(document: LangiumDocument, cancelToken = CancellationToken.None): Promise<AstNodeDescription[]> {
         const descr: AstNodeDescription[] = [];
         for (const node of streamAllContents(document.parseResult.value)) {
             await interruptAndCheck(cancelToken);
-            if (isModule(node.$container) || isBoundaryObject(node.$container)) {
-                let name = this.nameProvider.getName(node);
-                if (name) {
-                    name = this.qualifiedNameProvider.getQualifiedName(node.$container, name);
-                    descr.push(this.descriptions.createDescription(node, name, document));
-                }
-            }
+            this.exportNode(node, descr, document);
         }
         return descr;
+    }
+
+    /**
+     * Exports root elements and `BoundaryOperation`s with their qualified names.
+     */
+    protected override exportNode(node: AstNode, exports: AstNodeDescription[], document: LangiumDocument<AstNode>): void {
+        if (isAbstractElement(node) || isBoundaryOperation(node)) {
+            let name = this.nameProvider.getName(node);
+            if (name) {
+                name = this.qualifiedNameProvider.getQualifiedName(node.$container, name);
+                exports.push(this.descriptions.createDescription(node, name, document));
+            }
+        }
     }
 }

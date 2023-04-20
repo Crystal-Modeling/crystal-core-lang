@@ -1,6 +1,7 @@
-import { AstNodeDescription, DefaultScopeProvider, ReferenceInfo, Scope } from "langium";
+import { AstNode, AstNodeDescription, DefaultScopeProvider, ReferenceInfo, Scope, findRootNode } from "langium";
 import { QualifiedNameProvider } from "../crystal-core/naming";
-import { isImportsContainer } from "./fragments";
+import { BoundaryObject, BoundaryOperation } from "../generated/ast";
+import { ImportsContainer, isImportsContainer } from "./fragments";
 import { CrystalCoreServices } from "./services";
 
 
@@ -14,34 +15,61 @@ export abstract class CrystalCoreScopeProvider extends DefaultScopeProvider {
     }
 
     protected override getGlobalScope(referenceType: string, _context: ReferenceInfo): Scope {
+        const globalScope = super.getGlobalScope(referenceType, _context);
+
         if (this.isImportStatement(_context)) {
-            return super.getGlobalScope(referenceType, _context);
+            return globalScope;
         }
 
-        let rootContainer = _context.container;
-        while (rootContainer.$container) {
-            rootContainer = rootContainer.$container;
+        const rootNode = findRootNode(_context.container);
+
+        if (this.isImportsContainer(rootNode)) {
+            const importsScope = this.calculateImportsScope(rootNode, referenceType);
+
+            return this.createScope(importsScope, globalScope);
         }
 
-        if (isImportsContainer(rootContainer)) {
-            const importedNodes: AstNodeDescription[] = [];
+        return globalScope;
+    }
 
-            rootContainer.imports.forEach((importStatament) => {
-                let nodeDescription = importStatament.$nodeDescription;
 
-                if (nodeDescription) {
+    private calculateImportsScope(rootNode: ImportsContainer, referenceType: string): AstNodeDescription[] {
+        const importedNodes: AstNodeDescription[] = [];
+
+        rootNode.imports.forEach((importStatament) => {
+
+            if (importStatament.$nodeDescription) {
+                const importedNodeDescription = importStatament.$nodeDescription;
+
+                if (referenceType === importedNodeDescription.type) {
                     importedNodes.push({
-                        ...nodeDescription,
-                        name: this.qualifiedNameProvider.getSimpleName(nodeDescription.name)
+                        ...importedNodeDescription,
+                        name: this.qualifiedNameProvider.getSimpleName(importedNodeDescription.name)
                     });
+                } else if (referenceType === BoundaryOperation && importedNodeDescription.type === BoundaryObject) {
+                    // Imports are already resolved, using computeExports -> hence the name is fully qualified name
+                    const importedBOQualifiedName = importedNodeDescription.name
+
+                    this.indexManager.allElements(BoundaryOperation)
+                        .filter((boundaryOperation) => boundaryOperation.name.startsWith(importedBOQualifiedName))
+                        .forEach((boundaryOperationNodeDescription) => {
+                            importedNodes.push({
+                                ...boundaryOperationNodeDescription,
+                                name: this.qualifiedNameProvider
+                                    .getRelativeName(importedBOQualifiedName, boundaryOperationNodeDescription.name)
+                            });
+                        });
+
                 }
-            });
+            }
+        });
+        return importedNodes;
+    }
 
-            return this.createScope(importedNodes, super.getGlobalScope(referenceType, _context));
-        }
-
-        return super.getGlobalScope(referenceType, _context);
+    protected isImportsContainer(rootNode: AstNode): rootNode is ImportsContainer {
+        return isImportsContainer(rootNode) && this.isValidRootNode(rootNode);
     }
 
     protected abstract isImportStatement(_context: ReferenceInfo): boolean;
+    protected abstract isValidRootNode(rootNode: ImportsContainer): boolean;
 }
