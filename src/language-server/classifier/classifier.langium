@@ -1,7 +1,7 @@
 grammar Classifier
-import "../crystal-core/grammar/boundary-object-feature"
-import "../crystal-core/grammar/classifier-feature"
-import "../crystal-core/grammar/crystal-common"
+import "../shared-core/grammar/boundary-object-feature"
+import "../shared-core/grammar/classifier-feature"
+import "../shared-core/grammar/core-common"
 
 entry Module:
     package=Package

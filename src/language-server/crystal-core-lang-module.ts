@@ -2,9 +2,9 @@ import {
     createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject, LangiumSharedServices
 } from 'langium';
 import { BehaviorModule, BehaviorServices } from './behavior/behavior-module';
-import { registerBehaviorValidationChecks } from './behavior/behavior-validator';
-import { ClassifierModule } from './classifier/classifier-module';
-import { registerClassifierValidationChecks } from './classifier/classifier-validator';
+import { registerBehaviorValidationChecks } from './behavior/validation/behavior-validation';
+import { ClassifierModule, ClassifierServices } from './classifier/classifier-module';
+import { registerClassifierValidationChecks } from './classifier/validation/classifier-validation';
 import { BehaviorGeneratedModule, ClassifierGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
 
 
@@ -25,7 +25,8 @@ import { BehaviorGeneratedModule, ClassifierGeneratedModule, CrystalCoreLanguage
  */
 export function createCrystalCoreLanguageServices(context: DefaultSharedModuleContext): {
     shared: LangiumSharedServices,
-    behavior: BehaviorServices
+    behavior: BehaviorServices,
+    classifier: ClassifierServices
 } {
     const shared = inject(
         createDefaultSharedModule(context),
@@ -45,5 +46,5 @@ export function createCrystalCoreLanguageServices(context: DefaultSharedModuleCo
     shared.ServiceRegistry.register(classifier);
     registerBehaviorValidationChecks(behavior);
     registerClassifierValidationChecks(classifier);
-    return { shared, behavior };
+    return { shared, behavior, classifier };
 }

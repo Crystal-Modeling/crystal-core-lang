@@ -1,9 +1,9 @@
 import { AstNode, CstNode, DefaultRenameProvider, LangiumDocument, LangiumDocuments, ReferenceDescription, findDeclarationNodeAtOffset } from "langium";
 import { Location, Position, Range, RenameParams, TextEdit, WorkspaceEdit } from 'vscode-languageserver';
 import { URI } from "vscode-uri";
-import { QualifiedNameProvider } from "../crystal-core/naming";
-import { isModule } from "../generated/ast";
-import { ClassifierServices } from "./classifier-module";
+import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
+import { isModule } from "../../generated/ast";
+import { ClassifierServices } from "../classifier-module";
 
 export class ClassifierRenameProvider extends DefaultRenameProvider {
 

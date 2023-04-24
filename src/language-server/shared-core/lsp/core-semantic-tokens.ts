@@ -1,6 +1,6 @@
 import { AbstractSemanticTokenProvider, AstNode, SemanticTokenAcceptor } from "langium";
 import { SemanticTokenTypes } from "vscode-languageserver-types";
-import { isBoundaryObject, isBoundaryOperation, isClassifier, isOperationParameter, isPackage } from "../generated/ast";
+import { isBoundaryObject, isBoundaryOperation, isClassifier, isOperationParameter, isPackage } from "../../generated/ast";
 
 export abstract class AbstractCrystalCoreSemanticTokenProvider extends AbstractSemanticTokenProvider {
 

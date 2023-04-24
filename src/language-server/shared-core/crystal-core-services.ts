@@ -1,5 +1,5 @@
 import { LangiumServices } from "langium"
-import { QualifiedNameProvider } from "./naming"
+import { QualifiedNameProvider } from "./references/core-naming"
 
 export type CrystalCoreAddedServices = {
     references: {

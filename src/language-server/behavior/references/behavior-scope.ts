@@ -1,7 +1,7 @@
 import { ReferenceInfo } from "langium";
-import { ImportsContainer } from "../crystal-core/fragments";
-import { CrystalCoreScopeProvider } from "../crystal-core/scope";
-import { Workspace, isWorkspace } from "../generated/ast";
+import { ImportsContainer } from "../../shared-core/grammar/core-fragments";
+import { CrystalCoreScopeProvider } from "../../shared-core/references/core-scope";
+import { Workspace, isWorkspace } from "../../generated/ast";
 
 export class BehaviorScopeProvider extends CrystalCoreScopeProvider {
 

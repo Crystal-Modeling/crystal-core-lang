@@ -1,4 +1,4 @@
-import { BoundaryObject, Module, isModule } from "../generated/ast";
+import { BoundaryObject, Module, isModule } from "../../generated/ast";
 
 export class QualifiedNameProvider {
 

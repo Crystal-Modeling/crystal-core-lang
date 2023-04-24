@@ -1,10 +1,10 @@
 import { AstNode, AstNodeDescription, DefaultScopeComputation, LangiumDocument, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
-import { ImportsContainer } from "../crystal-core/fragments";
-import { QualifiedNameProvider } from "../crystal-core/naming";
-import { CrystalCoreScopeProvider } from "../crystal-core/scope";
-import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../generated/ast";
-import { ClassifierServices } from "./classifier-module";
+import { ImportsContainer } from "../../shared-core/grammar/core-fragments";
+import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
+import { CrystalCoreScopeProvider } from "../../shared-core/references/core-scope";
+import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../../generated/ast";
+import { ClassifierServices } from "../classifier-module";
 
 export class ClassifierScopeProvider extends CrystalCoreScopeProvider {
 

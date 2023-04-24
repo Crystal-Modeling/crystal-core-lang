@@ -1,7 +1,7 @@
 import { ValidationChecks } from 'langium';
-import { NameableNodeValidator } from '../crystal-core/node-validation';
-import { CrystalCoreLanguageAstType } from '../generated/ast';
-import type { BehaviorServices } from './behavior-module';
+import { NameableNodeValidator } from '../../shared-core/validation/core-validation';
+import { CrystalCoreLanguageAstType } from '../../generated/ast';
+import type { BehaviorServices } from '../behavior-module';
 
 /**
  * Register custom validation checks.
