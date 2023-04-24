@@ -22,50 +22,47 @@ Behavior:
 ;
 
 AbstractStatement:
-    VariableDeclaration
+    ValueContainerDeclarationStatement
     |
-    VariableAssignment
+    VariableAssignmentStatement
     |
-    ConstantInitialization
+    BoundaryOperationInvokationStatement
+;
+
+ValueContainerDeclarationStatement returns ValueContainer:
+    (mutable?='var' | 'val')
+    name=ID
+    ((   
+        ':' type=[Classifier:QualifiedName]
+        ValueAssignment?
+    )
     |
-    BoundaryOperationInvokation
+    ValueAssignment
+    )
 ;
 
-ValueContainer:
-    VariableDeclaration
-    |
-    ConstantInitialization
+fragment ValueAssignment:
+    '=' ValueDeclaration
 ;
 
-VariableDeclaration infers Variable:
-    'var' name=ID
-    ':' type=[Classifier:QualifiedName]
-    (Assignment)?
+fragment ValueDeclaration:
+    (value=(ValueLiteral | ValueReference))
 ;
 
-fragment Assignment:
-    '=' ImplicitValue
+ValueLiteral returns ExplicitValue:
+    {StringValue}value=STRING | {IntValue}value=INT
 ;
 
-fragment ImplicitValue:
-    (value=ValueStatement | valueContainer=[ValueContainer])
+ValueReference returns ImplicitValue:
+    valueContainer=[ValueContainer:ID]
 ;
 
-ValueStatement:
-    STRING{infer StringValue} | INT{infer IntValue}
+VariableAssignmentStatement:
+    variable=[ValueContainer:ID]
+    ValueAssignment
 ;
 
-VariableAssignment:
-    variable=[Variable]
-    Assignment
-;
-
-ConstantInitialization infers Constant:
-    'val' name=ID
-    Assignment
-;
-
-BoundaryOperationInvokation:
+BoundaryOperationInvokationStatement:
     operation=[BoundaryOperation:QualifiedName]
     '('
     (arguments+=Argument (',' arguments+=Argument)*)?
@@ -73,5 +70,16 @@ BoundaryOperationInvokation:
 ;
 
 Argument:
-    ImplicitValue
+    ValueDeclaration
 ;
+
+interface ValueContainer {
+    name: string
+    mutable: boolean
+    type?: @Classifier
+    value?: ExplicitValue | ImplicitValue
+}
+
+interface ImplicitValue {
+    valueContainer: @ValueContainer
+}
