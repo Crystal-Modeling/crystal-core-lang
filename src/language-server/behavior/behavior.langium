@@ -1,7 +1,7 @@
 grammar Behavior
-import "../../grammar/boundary-object-feature"
-import "../../grammar/classifier-feature"
-import "../../grammar/crystal-common"
+import "../crystal-core/grammar/boundary-object-feature"
+import "../crystal-core/grammar/classifier-feature"
+import "../crystal-core/grammar/crystal-common"
 
 entry Workspace:
     package=Package
