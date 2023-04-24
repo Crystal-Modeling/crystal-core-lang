@@ -1,9 +1,9 @@
 import { AstNode, AstNodeDescription, DefaultScopeComputation, LangiumDocument, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
+import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../../generated/ast";
 import { ImportsContainer } from "../../shared-core/grammar/core-fragments";
 import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
 import { CrystalCoreScopeProvider } from "../../shared-core/references/core-scope";
-import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../../generated/ast";
 import { ClassifierServices } from "../classifier-module";
 
 export class ClassifierScopeProvider extends CrystalCoreScopeProvider {
@@ -47,9 +47,8 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
      */
     protected override exportNode(node: AstNode, exports: AstNodeDescription[], document: LangiumDocument<AstNode>): void {
         if (isAbstractElement(node) || isBoundaryOperation(node)) {
-            let name = this.nameProvider.getName(node);
+            const name = this.qualifiedNameProvider.getQualifiedName(node);
             if (name) {
-                name = this.qualifiedNameProvider.getQualifiedName(node.$container, name);
                 exports.push(this.descriptions.createDescription(node, name, document));
             }
         }

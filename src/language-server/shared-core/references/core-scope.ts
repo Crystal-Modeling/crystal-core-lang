@@ -56,8 +56,7 @@ export abstract class CrystalCoreScopeProvider extends DefaultScopeProvider {
                         const boundaryObjectName = this.nameProvider.getName(boundaryObject)
 
                         boundaryObject.operations.forEach((operation) => {
-                            const operationNameInObject = this.qualifiedNameProvider
-                                .combineNames(boundaryObjectName, this.nameProvider.getName(operation))
+                            const operationNameInObject = this.qualifiedNameProvider.qualifyBy(boundaryObjectName, operation)
                             importedNodes.push(this.descriptions.createDescription(operation, operationNameInObject, boundaryObjectDocument));
                         });
                     }

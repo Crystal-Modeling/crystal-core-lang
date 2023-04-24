@@ -30,7 +30,7 @@ export type ClassifierServices = LangiumServices & ClassifierAddedServices
  */
 export const ClassifierModule: Module<ClassifierServices, PartialLangiumServices & ClassifierAddedServices> = {
     references: {
-        QualifiedNameProvider: () => new QualifiedNameProvider(),
+        QualifiedNameProvider: (services) => new QualifiedNameProvider(services),
         ScopeComputation: (services) => new ClassifierScopeComputation(services),
         ScopeProvider: (services) => new ClassifierScopeProvider(services)
     },

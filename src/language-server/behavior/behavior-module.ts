@@ -29,7 +29,7 @@ export type BehaviorServices = LangiumServices & BehaviorAddedServices
  */
 export const BehaviorModule: Module<BehaviorServices, PartialLangiumServices & BehaviorAddedServices> = {
     references: {
-        QualifiedNameProvider: () => new QualifiedNameProvider(),
+        QualifiedNameProvider: (services) => new QualifiedNameProvider(services),
         ScopeProvider: (services) => new BehaviorScopeProvider(services)
     },
     validation: {

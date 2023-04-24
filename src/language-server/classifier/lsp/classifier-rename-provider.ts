@@ -1,8 +1,8 @@
 import { AstNode, CstNode, DefaultRenameProvider, LangiumDocument, LangiumDocuments, ReferenceDescription, findDeclarationNodeAtOffset } from "langium";
 import { Location, Position, Range, RenameParams, TextEdit, WorkspaceEdit } from 'vscode-languageserver';
 import { URI } from "vscode-uri";
+import { isAbstractElement } from "../../generated/ast";
 import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
-import { isModule } from "../../generated/ast";
 import { ClassifierServices } from "../classifier-module";
 
 export class ClassifierRenameProvider extends DefaultRenameProvider {
@@ -91,8 +91,8 @@ export class ClassifierRenameProvider extends DefaultRenameProvider {
     }
 
     protected buildQualifiedName(node: AstNode, nodeName: string): string {
-        if (isModule(node.$container)) {
-            return this.qualifiedNameProvider.getQualifiedName(node.$container, nodeName);
+        if (isAbstractElement(node)) {
+            return this.qualifiedNameProvider.getQualifiedName(node, nodeName);
         }
         return nodeName;
     }
