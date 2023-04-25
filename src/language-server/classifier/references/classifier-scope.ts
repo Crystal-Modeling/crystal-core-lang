@@ -1,10 +1,11 @@
-import { AstNode, AstNodeDescription, DefaultScopeComputation, LangiumDocument, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
+import { AstNode, AstNodeDescription, DefaultScopeComputation, ReferenceInfo, interruptAndCheck, streamAllContents } from "langium";
 import { CancellationToken } from 'vscode-jsonrpc';
 import { Module, isAbstractElement, isBoundaryOperation, isModule } from "../../generated/ast";
 import { ImportsContainer } from "../../shared-core/grammar/core-fragments";
 import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
 import { CrystalCoreScopeProvider } from "../../shared-core/references/core-scope";
 import { ClassifierServices } from "../classifier-module";
+import { ClassifierDocument } from "../workspace/documents";
 
 export class ClassifierScopeProvider extends CrystalCoreScopeProvider {
 
@@ -33,7 +34,7 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
     /**
      * Iterate through **all** elements with their qualified names.
      */
-    override async computeExports(document: LangiumDocument, cancelToken = CancellationToken.None): Promise<AstNodeDescription[]> {
+    override async computeExports(document: ClassifierDocument, cancelToken = CancellationToken.None): Promise<AstNodeDescription[]> {
         const descr: AstNodeDescription[] = [];
         for (const node of streamAllContents(document.parseResult.value)) {
             await interruptAndCheck(cancelToken);
@@ -45,7 +46,7 @@ export class ClassifierScopeComputation extends DefaultScopeComputation {
     /**
      * Exports root elements and `BoundaryOperation`s with their qualified names.
      */
-    protected override exportNode(node: AstNode, exports: AstNodeDescription[], document: LangiumDocument<AstNode>): void {
+    protected override exportNode(node: AstNode, exports: AstNodeDescription[], document: ClassifierDocument): void {
         if (isAbstractElement(node) || isBoundaryOperation(node)) {
             const name = this.qualifiedNameProvider.getQualifiedName(node);
             if (name) {
