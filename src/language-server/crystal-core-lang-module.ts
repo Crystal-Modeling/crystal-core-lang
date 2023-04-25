@@ -60,6 +60,7 @@ function addTypeCollectionPhase(sharedServices: LangiumSharedServices, behaviorS
                 const typesCollector = behaviorServices.validation.BehaviorTypesCollector;
                 const workspace = document.parseResult.value;
                 document.valueContainerToType = typesCollector.collectTypesForValueContainers(workspace);
+                document.operationsParametersValidationInfo = typesCollector.collectOperationsParametersValidationInfo(workspace);
             }
         }
     });

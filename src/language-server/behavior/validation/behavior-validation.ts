@@ -28,6 +28,7 @@ export function registerBehaviorValidationChecks(services: BehaviorServices) {
         Workspace: [
             validator.checkValueContainerTypesMatchAssignedValueTypes,
             validator.checkValueContainerTypesMatchAssignedValueTypesInAssignments,
+            validator.checkInvokationArgumentsMatchOperationParameters,
         ]
     };
     registry.register(checks, validator);
@@ -65,14 +66,14 @@ export class BehaviorValidator extends NameableNodeValidator {
             stream(workspace.behavior.statements)
                 .filter(isValueContainer)
                 .filter((valueContainer) => valueContainer.value)
-                .forEach((valueContainer, i) => {
+                .forEach((valueContainer) => {
                     console.debug("=======> Checking ValueContainer type against its Value type")
                     const valueContainerTypeName = typeNameByValueContainerName.get(valueContainer.name)
                     const valueTypeName = getValueTypeName(valueContainer.value!, typeNameByValueContainerName)
                     if (valueContainerTypeName !== valueTypeName) {
                         accept('error',
                             `Value of type ${valueTypeName} is not compatible with ${valueContainer.$type} of type ${valueContainerTypeName}.`,
-                            { node: valueContainer, property: 'value', index: i })
+                            { node: valueContainer, property: 'value' })
                     }
                 });
 
@@ -85,7 +86,7 @@ export class BehaviorValidator extends NameableNodeValidator {
             stream(workspace.behavior.statements)
                 .filter(isValueContainerAssignmentStatement)
                 .filter((assignment) => assignment.variable.ref)
-                .forEach((assignment, i) => {
+                .forEach((assignment) => {
                     const valueContainer = assignment.variable.ref!
                     console.debug("=======> Checking ValueContainer type against assigned Value type")
                     const valueContainerTypeName = typeNameByValueContainerName.get(valueContainer.name)
@@ -93,7 +94,7 @@ export class BehaviorValidator extends NameableNodeValidator {
                     if (valueContainerTypeName !== valueTypeName) {
                         accept('error',
                             `Value of type ${valueTypeName} is not compatible with ${valueContainer.$type} of type ${valueContainerTypeName}.`,
-                            { node: assignment, property: 'value', index: i })
+                            { node: assignment, property: 'value' })
                     }
                 });
 
@@ -117,4 +118,40 @@ export class BehaviorValidator extends NameableNodeValidator {
     //         }
     //     }
     // }
+
+    checkInvokationArgumentsMatchOperationParameters(workspace: Workspace, accept: ValidationAcceptor): void {
+        if (workspace.$document && isBehaviorDocument(workspace.$document)) {
+            const operationsParametersValidationInfo = workspace.$document.operationsParametersValidationInfo
+            operationsParametersValidationInfo.forEach(({ invokation, definition }) => {
+                if (invokation.argumentTypes.length !== definition.parameters.length) {
+                    const index = invokation.argumentTypes.length < definition.parameters.length
+                        ? invokation.argumentTypes.length - 1
+                        : definition.parameters.length
+                    accept('error',
+                        `Expected ${definition.parameters.length} arguments, but got ${invokation.argumentTypes.length}`,
+                        { node: invokation.node, property: 'arguments', index })
+                } else {
+                    const argNumber = definition.parameters.length
+                    for (let i = 0; i < argNumber; i++) {
+                        if (invokation.argumentTypes[i] !== definition.parameters[i].type) {
+                            const actualArgumentType = invokation.argumentTypes[i]
+                            const expectedArgumentType = definition.parameters[i].type
+                            const parameterName = definition.parameters[i].name
+                            accept('error',
+                                `Expected ${expectedArgumentType} for ${nth(i + 1)} argument (${parameterName}), but got ${actualArgumentType})`,
+                                { node: invokation.node, property: 'arguments', index: i })
+                        }
+                    }
+                }
+            })
+        }
+    }
+}
+
+
+function nth(n: number): string {
+    if (n === 1) return '1st'
+    if (n === 2) return '2nd'
+    if (n === 3) return '3rd'
+    return `${n}th`
 }

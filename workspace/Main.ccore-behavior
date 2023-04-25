@@ -1,19 +1,20 @@
 package org.user.program
 import crystal.lang.String
-import crystal.io.Console
+import crystal.io.console
 
 behavior Main {
     var variable// No type specified or inferred
-    var name: String = "Hello world!"
+    var Name: String = "Hello world!"
     val greeting = "Greetings!"
     val constant: crystal.lang.Integer// Not initialized constant
     val someConstant: crystal.lang.Integer = "not compatible String"
-    name = "Hello world"
+    Name = "Hello world"
     greeting = "Another greeting, should give meaningful error message"
-    name = 555// Not compatible reassignment
+    Name = 555// Not compatible reassignment
 
-    crystal.io.Console.printLine(name)
-    Console.printLine("This should also work!")
-    Console.printLine("This shold not:", "arguments number does not match declaration")
-    Console.printLine(524)// Not compatible invokation
+    crystal.io.console.printLine(Name)
+    console.printLine("This should also work!")
+    console.printLine("This shold not:", "arguments number does not match declaration")
+    crystal.io.console.prompt()// Less arguments than expected
+    console.printLine(524)// Not compatible invokation
 }

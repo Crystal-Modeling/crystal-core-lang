@@ -4,7 +4,7 @@
 
 To implement minimal requirements for designing CrystalCore grammar and Langium LS during MSc in Huddersfield.
 
-## Current requirements
+## Current requirements (satisfied)
 
 CrystalCore v1 should have:
 

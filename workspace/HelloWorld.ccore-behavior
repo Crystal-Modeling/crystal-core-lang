@@ -1,0 +1,8 @@
+package crystal.demo
+import crystal.io.console
+
+behavior HelloWorld {
+    val greeting = "Hello world :)"
+
+    console.printLine(greeting)
+}

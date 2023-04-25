@@ -57,7 +57,7 @@ ValueContainerAssignmentStatement:
     ValueAssignment
 ;
 
-BoundaryOperationInvokationStatement:
+BoundaryOperationInvokationStatement returns BoundaryOperationInvokation:
     operation=[BoundaryOperation:QualifiedName]
     '('
     (arguments+=Argument (',' arguments+=Argument)*)?
@@ -83,4 +83,9 @@ interface Variable extends ValueContainer {
 }
 
 interface Constant extends ValueContainer {
+}
+
+interface BoundaryOperationInvokation {
+    operation: @BoundaryOperation
+    arguments: Argument[]
 }
