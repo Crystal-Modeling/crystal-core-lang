@@ -24,21 +24,16 @@ Behavior:
 AbstractStatement:
     ValueContainerDeclarationStatement
     |
-    VariableAssignmentStatement
+    ValueContainerAssignmentStatement
     |
     BoundaryOperationInvokationStatement
 ;
 
 ValueContainerDeclarationStatement returns ValueContainer:
-    (mutable?='var' | 'val')
+    (mutable?='var'{Variable} | 'val'{Constant})
     name=ID
-    ((   
-        ':' type=[Classifier:QualifiedName]
-        ValueAssignment?
-    )
-    |
-    ValueAssignment
-    )
+    (':' type=[Classifier:QualifiedName])?
+    ValueAssignment?
 ;
 
 fragment ValueAssignment:
@@ -54,10 +49,10 @@ ValueLiteral returns ExplicitValue:
 ;
 
 ValueReference returns ImplicitValue:
-    valueContainer=[ValueContainer:ID]
+    origin=[ValueContainer:ID]
 ;
 
-VariableAssignmentStatement:
+ValueContainerAssignmentStatement:
     variable=[ValueContainer:ID]
     ValueAssignment
 ;
@@ -81,5 +76,11 @@ interface ValueContainer {
 }
 
 interface ImplicitValue {
-    valueContainer: @ValueContainer
+    origin: @ValueContainer
+}
+
+interface Variable extends ValueContainer {
+}
+
+interface Constant extends ValueContainer {
 }

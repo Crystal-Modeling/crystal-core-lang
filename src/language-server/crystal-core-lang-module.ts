@@ -1,8 +1,9 @@
 import {
-    createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject, LangiumSharedServices
+    createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, DocumentState, inject, interruptAndCheck, LangiumSharedServices
 } from 'langium';
 import { BehaviorModule, BehaviorServices } from './behavior/behavior-module';
 import { registerBehaviorValidationChecks } from './behavior/validation/behavior-validation';
+import { isBehaviorDocument } from './behavior/workspace/documents';
 import { ClassifierModule, ClassifierServices } from './classifier/classifier-module';
 import { registerClassifierValidationChecks } from './classifier/validation/classifier-validation';
 import { BehaviorGeneratedModule, ClassifierGeneratedModule, CrystalCoreLanguageGeneratedSharedModule } from './generated/module';
@@ -32,19 +33,34 @@ export function createCrystalCoreLanguageServices(context: DefaultSharedModuleCo
         createDefaultSharedModule(context),
         CrystalCoreLanguageGeneratedSharedModule
     );
-    const behavior = inject(
-        createDefaultModule({ shared }),
-        BehaviorGeneratedModule,
-        BehaviorModule
-    );
     const classifier = inject(
         createDefaultModule({ shared }),
         ClassifierGeneratedModule,
         ClassifierModule
     );
-    shared.ServiceRegistry.register(behavior);
+    const behavior = inject(
+        createDefaultModule({ shared }),
+        BehaviorGeneratedModule,
+        BehaviorModule
+    );
+    addTypeCollectionPhase(shared, behavior);
     shared.ServiceRegistry.register(classifier);
+    shared.ServiceRegistry.register(behavior);
     registerBehaviorValidationChecks(behavior);
     registerClassifierValidationChecks(classifier);
     return { shared, behavior, classifier };
+}
+
+function addTypeCollectionPhase(sharedServices: LangiumSharedServices, behaviorServices: BehaviorServices) {
+    const documentBuilder = sharedServices.workspace.DocumentBuilder;
+    documentBuilder.onBuildPhase(DocumentState.IndexedReferences, async (documents, cancelToken) => {
+        for (const document of documents) {
+            await interruptAndCheck(cancelToken);
+            if (isBehaviorDocument(document)) {
+                const typesCollector = behaviorServices.validation.BehaviorTypesCollector;
+                const workspace = document.parseResult.value;
+                document.valueContainerToType = typesCollector.collectTypesForValueContainers(workspace);
+            }
+        }
+    });
 }

@@ -1,17 +1,19 @@
 import {
     LangiumServices, Module, PartialLangiumServices
 } from 'langium';
-import { QualifiedNameProvider } from '../shared-core/references/core-naming';
 import { CrystalCoreAddedServices } from '../shared-core/crystal-core-services';
-import { BehaviorScopeProvider } from './references/behavior-scope';
+import { QualifiedNameProvider } from '../shared-core/references/core-naming';
 import { BehaviorSemanticTokenProvider } from './lsp/behavior-semantic-tokens';
+import { BehaviorScopeProvider } from './references/behavior-scope';
 import { BehaviorValidator } from './validation/behavior-validation';
+import { BehaviorTypesCollector } from './validation/types-computation';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type BehaviorAddedServices = {
     validation: {
+        BehaviorTypesCollector: BehaviorTypesCollector
         BehaviorValidator: BehaviorValidator
     }
 } & CrystalCoreAddedServices
@@ -33,6 +35,7 @@ export const BehaviorModule: Module<BehaviorServices, PartialLangiumServices & B
         ScopeProvider: (services) => new BehaviorScopeProvider(services)
     },
     validation: {
+        BehaviorTypesCollector: (services) => new BehaviorTypesCollector(services),
         BehaviorValidator: () => new BehaviorValidator()
     },
     lsp: {
