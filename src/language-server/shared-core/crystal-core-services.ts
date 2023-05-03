@@ -1,11 +1,18 @@
-import { LangiumServices } from "langium"
-import { QualifiedNameProvider } from "./references/core-naming"
+import { LangiumServices, PartialLangiumServices } from "langium"
+import { CrystalCoreNameProvider, QualifiedNameProvider } from "./references/core-naming"
 
-export type CrystalCoreAddedServices = {
+type CrystalCoreAddedServices = {
     references: {
-        QualifiedNameProvider: QualifiedNameProvider
+        NameProvider: CrystalCoreNameProvider,
+        QualifiedNameProvider: QualifiedNameProvider,
     },
 }
 
 
+/**
+ * Union of Langium default services and your custom services - use this as constructor parameter
+ * of custom service classes.
+ */
 export type CrystalCoreServices = LangiumServices & CrystalCoreAddedServices
+
+export type PartialCrystalCoreServices = PartialLangiumServices & CrystalCoreAddedServices

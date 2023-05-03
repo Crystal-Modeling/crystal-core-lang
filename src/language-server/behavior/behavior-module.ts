@@ -1,8 +1,8 @@
 import {
-    LangiumServices, Module, PartialLangiumServices
+    Module
 } from 'langium';
-import { CrystalCoreAddedServices } from '../shared-core/crystal-core-services';
-import { QualifiedNameProvider } from '../shared-core/references/core-naming';
+import { CrystalCoreServices, PartialCrystalCoreServices } from '../shared-core/crystal-core-services';
+import { CrystalCoreNameProvider, QualifiedNameProvider } from '../shared-core/references/core-naming';
 import { BehaviorSemanticTokenProvider } from './lsp/behavior-semantic-tokens';
 import { BehaviorScopeProvider } from './references/behavior-scope';
 import { BehaviorValidator } from './validation/behavior-validation';
@@ -16,29 +16,30 @@ export type BehaviorAddedServices = {
         BehaviorTypesCollector: BehaviorTypesCollector
         BehaviorValidator: BehaviorValidator
     }
-} & CrystalCoreAddedServices
+}
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type BehaviorServices = LangiumServices & BehaviorAddedServices
+export type BehaviorServices = CrystalCoreServices & BehaviorAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const BehaviorModule: Module<BehaviorServices, PartialLangiumServices & BehaviorAddedServices> = {
+export const BehaviorModule: Module<BehaviorServices, PartialCrystalCoreServices & BehaviorAddedServices> = {
     references: {
+        NameProvider: () => new CrystalCoreNameProvider(),
         QualifiedNameProvider: (services) => new QualifiedNameProvider(services),
-        ScopeProvider: (services) => new BehaviorScopeProvider(services)
+        ScopeProvider: (services) => new BehaviorScopeProvider(services),
     },
     validation: {
         BehaviorTypesCollector: (services) => new BehaviorTypesCollector(services),
-        BehaviorValidator: () => new BehaviorValidator()
+        BehaviorValidator: () => new BehaviorValidator(),
     },
     lsp: {
-        SemanticTokenProvider: (services) => new BehaviorSemanticTokenProvider(services)
+        SemanticTokenProvider: (services) => new BehaviorSemanticTokenProvider(services),
     }
 };

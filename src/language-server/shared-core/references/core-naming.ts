@@ -1,20 +1,20 @@
-import { AstNode, NameProvider } from "langium";
-import { AbstractElement, BoundaryOperation, isModule } from "../../generated/ast";
+import { AstNode, DefaultNameProvider, NameProvider, NamedAstNode } from "langium";
+import { AbstractElement, isModule } from "../../generated/ast";
 import { CrystalCoreServices } from "../crystal-core-services";
 
 export class QualifiedNameProvider {
 
-    private nameProvider: NameProvider
+    private nameProvider: CrystalCoreNameProvider
 
     constructor(services: CrystalCoreServices) {
         this.nameProvider = services.references.NameProvider
     }
 
-    private readonly DOT = '.';
+    private static readonly DOT = '.';
 
     /**
      * @param element the element to be qualified
-     * @param name a name of the element. If no name is supplied, one supplied by {@link NameProvider} is used
+     * @param name a name of the element. If no name is supplied, one supplied by {@link CrystalCoreNameProvider} is used
      * @returns qualified name separated by `.`
      */
     getQualifiedName(element: AbstractElement, name?: string): string;
@@ -41,7 +41,7 @@ export class QualifiedNameProvider {
      * @returns the name token after last `.` in `qualifiedName`
      */
     getSimpleName(qualifiedName: string): string {
-        const lastDotIndex = qualifiedName.lastIndexOf(this.DOT);
+        const lastDotIndex = qualifiedName.lastIndexOf(QualifiedNameProvider.DOT);
         return qualifiedName.substring(lastDotIndex + 1);
     }
 
@@ -50,8 +50,8 @@ export class QualifiedNameProvider {
      * @param name 
      * @returns `name` qualified by `prefixName`
      */
-    qualifyBy(prefixName: string | undefined, element: BoundaryOperation): string
-    qualifyBy(prefixName: string | undefined, element: AstNode): string | undefined
+    qualifyBy(prefixName: string | undefined, element: NamedAstNode): string
+    qualifyBy(prefixName: string | undefined, element: AstNode): undefined
     qualifyBy(prefixName: string | undefined, element: AstNode): string | undefined {
         const name = this.nameProvider.getName(element)
         if (!name) {
@@ -61,7 +61,7 @@ export class QualifiedNameProvider {
     }
 
     protected combineNames(prefixName: string | undefined, name: string): string {
-        return (prefixName ? prefixName + this.DOT : '') + name;
+        return (prefixName ? prefixName + QualifiedNameProvider.DOT : '') + name;
     }
 
     /**
@@ -69,7 +69,16 @@ export class QualifiedNameProvider {
      * @returns `true` if `name` contains `.` in it or `false` otherwise
      */
     isQualifiedName(name: string): boolean {
-        return name.includes(this.DOT);
+        return name.includes(QualifiedNameProvider.DOT);
     }
 
+}
+
+export class CrystalCoreNameProvider extends DefaultNameProvider implements NameProvider {
+
+    override getName(node: NamedAstNode): string
+    override getName(node: AstNode): undefined
+    override getName(node: AstNode): string | undefined {
+        return super.getName(node);
+    }
 }

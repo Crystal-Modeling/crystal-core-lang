@@ -1,5 +1,5 @@
 import { AstNode, AstNodeDescription, DefaultScopeProvider, ReferenceInfo, Scope, findRootNode, getDocument } from "langium";
-import { QualifiedNameProvider } from "./core-naming";
+import { CrystalCoreNameProvider, QualifiedNameProvider } from "./core-naming";
 import { BoundaryOperation, isBoundaryObject } from "../../generated/ast";
 import { ImportsContainer, isImportsContainer } from "../grammar/core-fragments";
 import { CrystalCoreServices } from "../crystal-core-services";
@@ -8,9 +8,11 @@ import { CrystalCoreServices } from "../crystal-core-services";
 export abstract class CrystalCoreScopeProvider extends DefaultScopeProvider {
 
     qualifiedNameProvider: QualifiedNameProvider;
+    protected override nameProvider: CrystalCoreNameProvider;
 
     constructor(services: CrystalCoreServices) {
         super(services);
+        this.nameProvider = services.references.NameProvider;
         this.qualifiedNameProvider = services.references.QualifiedNameProvider;
     }
 
