@@ -1,5 +1,5 @@
 import { ValidationChecks } from "langium";
-import { NameableNodeValidator } from "../../shared-core/validation/core-validation";
+import { NamedAstNodeValidator } from "../../shared-core/validation/core-validation";
 import { CrystalCoreLanguageAstType } from "../../generated/ast";
 import { ClassifierServices } from "../classifier-module";
 
@@ -21,6 +21,6 @@ export function registerClassifierValidationChecks(services: ClassifierServices)
 /**
  * Implementation of custom validations.
  */
-export class ClassifierValidator extends NameableNodeValidator {
+export class ClassifierValidator extends NamedAstNodeValidator {
 
 }

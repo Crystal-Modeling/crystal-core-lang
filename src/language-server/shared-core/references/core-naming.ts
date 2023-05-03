@@ -29,7 +29,7 @@ export class QualifiedNameProvider {
         if (!qualifier) {
             prefix = ''
         } else if (isModule(qualifier)) {
-            prefix = qualifier.package.name;
+            prefix = this.nameProvider.getName(qualifier.package);
         } else {
             prefix = this.getQualifiedName(qualifier as AstNode);
         }

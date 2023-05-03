@@ -1,6 +1,6 @@
 import { ValidationAcceptor, ValidationChecks, findRootNode, stream } from 'langium';
 import { Constant, CrystalCoreLanguageAstType, ValueContainerAssignmentStatement, Variable, Workspace, isConstant, isValueContainer, isValueContainerAssignmentStatement } from '../../generated/ast';
-import { NameableNodeValidator } from '../../shared-core/validation/core-validation';
+import { NamedAstNodeValidator } from '../../shared-core/validation/core-validation';
 import type { BehaviorServices } from '../behavior-module';
 import { isBehaviorDocument } from '../workspace/documents';
 import { getValueTypeName } from './types-computation';
@@ -38,7 +38,7 @@ export function registerBehaviorValidationChecks(services: BehaviorServices) {
  * Implementation of custom validations.
  */
 //TODO: Optimize implementation
-export class BehaviorValidator extends NameableNodeValidator {
+export class BehaviorValidator extends NamedAstNodeValidator {
 
     checkVariableTypeIsDefined(variable: Variable, accept: ValidationAcceptor): void {
         const document = findRootNode(variable).$document

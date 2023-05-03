@@ -34,7 +34,7 @@ export const ClassifierModule: Module<ClassifierServices, PartialCrystalCoreServ
         ScopeProvider: (services) => new ClassifierScopeProvider(services),
     },
     validation: {
-        ClassifierValidator: () => new ClassifierValidator(),
+        ClassifierValidator: (services) => new ClassifierValidator(services),
     },
     lsp: {
         SemanticTokenProvider: (services) => new ClassifierSemanticTokenProvider(services),

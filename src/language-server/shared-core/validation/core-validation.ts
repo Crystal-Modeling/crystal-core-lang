@@ -1,24 +1,28 @@
-import { AstNode, ValidationAcceptor } from "langium";
+import { NamedAstNode, ValidationAcceptor } from "langium";
+import { CrystalCoreNameProvider } from "../references/core-naming";
+import { CrystalCoreServices } from "../crystal-core-services";
 
-export abstract class NameableNodeValidator {
+export abstract class NamedAstNodeValidator {
 
-    checkNameStartsWithCapital(type: AstNode & Nameable, accept: ValidationAcceptor): void {
-        if (type.name) {
-            const firstChar = type.name.substring(0, 1);
-            if (firstChar.toUpperCase() !== firstChar) {
-                accept('warning', `${type.$type} name should start with a capital.`, { node: type, property: 'name' });
-            }
+    private nameProvider: CrystalCoreNameProvider
+
+    public constructor(services: CrystalCoreServices) {
+        this.nameProvider = services.references.NameProvider
+    }
+
+    checkNameStartsWithCapital(node: NamedAstNode, accept: ValidationAcceptor): void {
+        const name = this.nameProvider.getName(node)
+        const firstChar = name.substring(0, 1);
+        if (firstChar.toUpperCase() !== firstChar) {
+            accept('warning', `${node.$type} name should start with a capital.`, { node: node, property: 'name' });
         }
     }
 
-    checkNameStartsWithLowercase(type: AstNode & Nameable, accept: ValidationAcceptor): void {
-        if (type.name) {
-            const firstChar = type.name.substring(0, 1);
-            if (firstChar.toLowerCase() !== firstChar) {
-                accept('warning', `${type.$type} name should start with a lowercase character.`, { node: type, property: 'name' });
-            }
+    checkNameStartsWithLowercase(node: NamedAstNode, accept: ValidationAcceptor): void {
+        const name = this.nameProvider.getName(node)
+        const firstChar = name.substring(0, 1);
+        if (firstChar.toLowerCase() !== firstChar) {
+            accept('warning', `${node.$type} name should start with a lowercase character.`, { node: node, property: 'name' });
         }
     }
 }
-
-export type Nameable = { name: string }

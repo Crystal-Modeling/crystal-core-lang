@@ -37,7 +37,7 @@ export const BehaviorModule: Module<BehaviorServices, PartialCrystalCoreServices
     },
     validation: {
         BehaviorTypesCollector: (services) => new BehaviorTypesCollector(services),
-        BehaviorValidator: () => new BehaviorValidator(),
+        BehaviorValidator: (services) => new BehaviorValidator(services),
     },
     lsp: {
         SemanticTokenProvider: (services) => new BehaviorSemanticTokenProvider(services),

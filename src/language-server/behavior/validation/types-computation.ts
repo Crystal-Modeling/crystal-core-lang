@@ -1,15 +1,17 @@
 import { Reference } from "langium";
 import * as ast from "../../generated/ast";
-import { QualifiedNameProvider } from "../../shared-core/references/core-naming";
+import { CrystalCoreNameProvider, QualifiedNameProvider } from "../../shared-core/references/core-naming";
 import { BehaviorServices } from "../behavior-module";
 import { BehaviorDocument, OperationsParametersValidationInfo, ParameterDefinition, ReadOnlyValueContainerToType, ValueContainerToType } from "../workspace/documents";
 
 export class BehaviorTypesCollector {
 
     private qualifiedNameProvider: QualifiedNameProvider
+    private nameProvider: CrystalCoreNameProvider
 
     constructor(services: BehaviorServices) {
         this.qualifiedNameProvider = services.references.QualifiedNameProvider
+        this.nameProvider = services.references.NameProvider
     }
 
     public collectTypesForValueContainers(workspace: ast.Workspace): ValueContainerToType {
@@ -19,10 +21,11 @@ export class BehaviorTypesCollector {
             if (ast.isValueContainer(statement)) {
                 const valueContainer = statement
                 const typeName = this.computeTypeNameForValueContainer(types, valueContainer)
+                const valueContainerName = this.nameProvider.getName(valueContainer)
 
                 if (typeName)
                     //HACK: Here, and in many other places I rely on the fact that fully-qualified name of the element is unique across all workspace documents. This needs to be addressed in language validator
-                    types.set(valueContainer.name, typeName)
+                    types.set(valueContainerName, typeName)
 
             }
         }
@@ -54,7 +57,7 @@ export class BehaviorTypesCollector {
                             node: operationInvokation.operation.ref,
                             parameters: operationInvokation.operation.ref.parameters
                                 .map((param) => ({
-                                    name: param.name,
+                                    name: this.nameProvider.getName(param),
                                     type: this.getClassifierTypeName(param.type)
                                 }))
                                 .filter((param): param is ParameterDefinition => !!param.type)
