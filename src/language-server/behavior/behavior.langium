@@ -9,10 +9,7 @@ entry Workspace:
     behavior=Behavior
 ;
 
-//BUG: Raise a ticket on Langium: ImportableElement *is* referenced in CrossReference
-ImportableElement:
-    Classifier | BoundaryObject
-;
+type ImportableElement = Classifier | BoundaryObject;
 
 Behavior:
     'behavior' name=ID
